@@ -1,3 +1,4 @@
+import ExpressionNode from './AST/ExpressionNode';
 import StatementsNode from './AST/StatementsNode';
 import Lexer from './Lexer';
 import ParserCore from './Parser';
@@ -10,7 +11,7 @@ const POSTFIX = '}}';
 
 export interface IField {
   id: string;
-  title: string;
+  name: string;
   type: string;
 }
 
@@ -31,20 +32,56 @@ export default class Parser {
     if (isNil(expression)) FormulaError.requiredParamsError(['expression']);
     this.expression = expression;
     this.lexer = new Lexer(expression);
-    // if (fields.length === 0) FormulaError.requiredParamsError(['fields']);
     this.fields = fields;
   }
 
   /**
    * Prepares the field mappings for use in the parsing process.
-   * @returns {Array<{ title: string, value: string, type: string }>} The mapped field objects.
+   * @returns {IField[]} The mapped field objects.
    */
-  private prepareFields(): { title: string; value: string; type: string }[] {
+  private prepareFields(): IField[] {
     return this.fields.map((field) => ({
-      title: `${PREFIX}${field.title}${POSTFIX}`,
-      value: field.id,
+      name: `${PREFIX}${field.name}${POSTFIX}`,
+      id: field.id,
       type: field.type,
     }));
+  }
+
+  /**
+   * Walk by ast nodes
+   * @example
+   * getUsedVariables() {
+   * const [, node] = this.prepareParser();
+   * const variables = new Set();
+   * this.walkAst(node, n => {
+   * if (n.type === 'Variable') {
+   *    variables.add(n.name);
+   *  }
+   * });
+   * return [...variables];
+   * }
+   */
+  walkAst(
+    node: ExpressionNode,
+    callback: (node: ExpressionNode) => void,
+  ): void {
+    if (!node || typeof node !== 'object') return;
+
+    callback(node);
+
+    for (const key of Object.keys(node) as (keyof ExpressionNode)[]) {
+      const child = node[key];
+
+      if (Array.isArray(child)) {
+        child.forEach((c) => {
+          if (typeof c === 'object' && c !== null) {
+            this.walkAst(c as ExpressionNode, callback);
+          }
+        });
+      } else if (typeof child === 'object' && child !== null) {
+        this.walkAst(child as ExpressionNode, callback);
+      }
+    }
   }
 
   /**
@@ -86,19 +123,24 @@ export default class Parser {
 }
 
 // Example usage:
-// const fields = [
-//   { id: '1', title: 'Поле 1', type: 'number' },
-//   { id: '2', title: 'Поле 2', type: 'number' },
-//   { id: '3', title: 'Поле 3', type: 'text' },
+// const fields: IField[] = [
+//   { id: '1', name: 'Поле 1', type: 'number' },
+//   { id: '2', name: 'Поле 2', type: 'number' },
+//   { id: '3', name: 'Поле 3', type: 'number' },
+//   { id: '9', name: 'Поле 4', type: 'number' },
+//   { id: 'FIELD123123', name: 'Поле 5', type: 'number' },
 // ];
 
-// const values = {
+// const values: Record<string, unknown> = {
 //   1: 1000,
 //   2: 5000,
-//   3: 'testtext',
+//   3: 100,
+//   9: 1000,
+//   FIELD123123: 150,
 // };
 
-// const expression = 'LEN(REPEAT(REPEAT({{Поле 3}},2),2)) + 1+  LEN(REPEAT("zxc", 1))';
+// const expression =
+//   '{{Поле 1}} + {{Поле 2}} + {{Поле 3}} + {{Поле 4}} + {{Поле 5}}';
 
 // const parser = new Parser(expression, fields);
 
