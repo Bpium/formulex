@@ -177,7 +177,7 @@ export const SQL_CAST_TYPES: Record<string, CastTypeHandler> = {
   [LITERAL_ARRAY_NODE_TYPE]: (res, [ids, names, fieldTitle]) =>
     `(CASE WHEN ((${res})::TEXT ~ '^\\{.*\\}$' AND PG_TYPEOF((${res})::TEXT::TEXT[])::TEXT = 'text[]')
       THEN (CASE WHEN ((${res})::TEXT::TEXT[] <@ ARRAY[${ids.map((i: unknown) => `'${i}'`)}]) THEN (${res})::TEXT::TEXT[]
-        WHEN ((${res})::TEXT::TEXT[] <@ ARRAY[${names.map((i: unknown) => `'${i}'`)}]) THEN (SELECT array_agg(id) FROM (SELECT id FROM ${fieldTitle} WHERE name = ANY((${res})::TEXT::TEXT[])))
+        WHEN ((${res})::TEXT::TEXT[] <@ ARRAY[${names.map((i: unknown) => `'${i}'`)}]) THEN (SELECT array_agg(id) FROM (SELECT id FROM ${fieldTitle} WHERE name = ANY((${res})::TEXT::TEXT[])) AS ${fieldTitle}_q)
         ELSE ARRAY[]::TEXT[] END)
       ELSE ARRAY[]::TEXT[] END)`,
 };
