@@ -103,7 +103,7 @@ describe('arrays funcs sql querys', () => {
   test('sql UNIQUE with primitive arr', () => {
     const parser = new Parser('UNIQUE([1,2,3,3,2,1,1/0])');
     expect(parser.toSqlWithVariables(true, values)).toBe(
-      'ARRAY(SELECT DISTINCT UNNEST(ARRAY[1,2,3,3,2,1,(CASE WHEN (0) != 0 THEN ROUND((1)::numeric / 0, 10)::NUMERIC ELSE NULL END)]))',
+      'ARRAY(SELECT DISTINCT UNNEST(ARRAY[1,2,3,3,2,1,(CASE WHEN (0) != 0 THEN ROUND(((1)::numeric / 0)::NUMERIC, 10) ELSE NULL END)]))',
     );
   });
   test('sql UNIQUE with items arr', () => {

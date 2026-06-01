@@ -145,7 +145,7 @@ describe('execute text funcs', () => {
   test('join with nums array, null should be ignored', () => {
     const parser = new Parser('JOIN([1, 2, 3, 1 / 0], ",")');
     expect(parser.toSqlWithVariables(true)).toBe(
-      "ARRAY_TO_STRING(ARRAY[1,2,3,(CASE WHEN (0) != 0 THEN ROUND((1)::numeric / 0, 10)::NUMERIC ELSE NULL END)], ',')",
+      "ARRAY_TO_STRING(ARRAY[1,2,3,(CASE WHEN (0) != 0 THEN ROUND(((1)::numeric / 0)::NUMERIC, 10) ELSE NULL END)], ',')",
     );
   });
 
