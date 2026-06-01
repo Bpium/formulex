@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import {
   CHECKBOXES,
   DROPDOWN,
+  IFRAME,
   NUMBER,
   PROGRESS,
   STARS,
@@ -22,6 +23,7 @@ export const typesMapper = {
   [SWITCH]: BOOLEAN_NODE_TYPE,
   [DROPDOWN]: ARRAY_WITH_ITEMS_NODE,
   [CHECKBOXES]: ARRAY_WITH_ITEMS_NODE,
+  [IFRAME]: LITERAL_NODE_TYPE,
 };
 
 export const castMapper = {

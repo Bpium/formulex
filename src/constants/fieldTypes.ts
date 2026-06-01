@@ -1,4 +1,4 @@
-export const GROUP=  'group';
+export const GROUP = 'group';
 export const TEXT = 'text';
 export const CONTACT = 'contact';
 export const ADDRESS = 'address';
@@ -10,7 +10,8 @@ export const BUTTON = 'button';
 export const CHECKBOXES = 'checkboxes';
 export const RADIOBUTTON = 'radiobutton';
 export const PROGRESS = 'progress';
-export const STARS ='stars';
+export const STARS = 'stars';
 export const USER = 'user';
 export const OBJECT = 'object';
 export const FILE = 'file';
+export const IFRAME = 'iframe';
