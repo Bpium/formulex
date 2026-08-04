@@ -20,6 +20,8 @@ export const logicFunctions: Record<
       jsFn: logicFunctionsToJsMap.ISEMPTY,
       sqlFn: logicFunctionsToSqlMap.ISEMPTY,
       specialWorkWithNull: true,
+      // Empty numeric fields must stay NULL here; arithmetic still uses default 0
+      skipVariableDefaults: true,
     },
   ],
   // IFEMPTY: [

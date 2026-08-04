@@ -23,6 +23,8 @@ interface BaseFunction {
   jsFn: IFormatterFunc;
   sqlFn: IFormatterFunc;
   specialWorkWithNull?: boolean;
+  /** Do not apply type defaults (e.g. number null→0) when stringifying function args */
+  skipVariableDefaults?: boolean;
 }
 interface SafeFunction extends BaseFunction {
   jsSafeFn: IFormatterFunc;

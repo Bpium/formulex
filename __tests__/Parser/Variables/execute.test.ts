@@ -71,4 +71,26 @@ describe('variables execute', () => {
 
     expect(parser.runJs(js, nullValues)).toBe(null);
   });
+
+  test('isempty empty number is true', () => {
+    const parser = new Parser('ISEMPTY({1})', fields);
+    const js = parser.toJs();
+
+    expect(parser.runJs(js, nullValues)).toBe(true);
+  });
+
+  test('isempty explicit zero is false', () => {
+    const parser = new Parser('ISEMPTY({1})', fields);
+    const js = parser.toJs();
+
+    expect(parser.runJs(js, { ...nullValues, 1: 0 })).toBe(false);
+  });
+
+  test('if isempty then arithmetic still uses zero default outside isempty', () => {
+    const parser = new Parser('IF(ISEMPTY({1}), 42, {1}+1)', fields);
+    const js = parser.toJs();
+
+    expect(parser.runJs(js, nullValues)).toBe(42);
+    expect(parser.runJs(js, { ...nullValues, 1: 0 })).toBe(1);
+  });
 });

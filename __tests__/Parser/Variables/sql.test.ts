@@ -43,6 +43,18 @@ describe('variables to sql', () => {
       `COALESCE("dateCol", NULL)`,
     );
   });
+  test('isempty number field skips coalesce default', () => {
+    const parser = new Parser('ISEMPTY({1})', fields);
+    expect(parser.toSqlWithVariables(false, values)).toBe(
+      "((100) IS NULL OR (100)::TEXT = '' OR (100)::TEXT = '{}')",
+    );
+  });
+  test('arithmetic still coalesces empty number to 0', () => {
+    const parser = new Parser('{1}+1', fields);
+    expect(parser.toSqlWithVariables(false, values)).toBe(
+      `ROUND((COALESCE(100, 0) + 1)::NUMERIC, 10)`,
+    );
+  });
 });
 
 describe('variables errors', () => {

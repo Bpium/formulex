@@ -75,6 +75,8 @@ export default class Parser {
   returnTypesCache: Record<string, INodeReturnType> = {};
   possibleStringifiers: NodeStringifierMap;
   possibleTypesGetters: NodeTypesGettersMap;
+  /** >0 while stringifying args of a function with skipVariableDefaults (e.g. ISEMPTY) */
+  private skipVariableDefaultsDepth = 0;
 
   constructor(tokens: Token[], variables: Record<string, IVar>) {
     this.tokens = tokens;
@@ -485,11 +487,13 @@ export default class Parser {
         typesMapper[variableType as keyof typeof typesMapper] || variableType;
 
       const defaultValue = defaultValues[format][variableType];
+      const useDefault =
+        defaultValue !== undefined && this.skipVariableDefaultsDepth === 0;
 
       if (format === FORMATS.JS) {
         const preparedVar = `$$VARIABLES['${globalVarKey}']`;
 
-        if (defaultValue === undefined) {
+        if (!useDefault) {
           return preparedVar;
         }
 
@@ -505,7 +509,7 @@ export default class Parser {
         }
         const preparedValue = this.prepareVariableValue(value);
 
-        if (defaultValue === undefined) {
+        if (!useDefault) {
           return String(preparedValue);
         }
 
@@ -719,9 +723,6 @@ export default class Parser {
         FormulaError.unexpectedDataType(node.func.pos, node.name);
       }
 
-      const functionArgs: string[] = node.args.map((arg) =>
-        this.stringifyAst({ node: arg, format, safe, values, bpiumValues }),
-      );
       const neededFunc = currentFunction[idx];
       const requiredArgsCount = neededFunc.args.filter(
         (i) => i.required === true || i.required === undefined,
@@ -730,12 +731,25 @@ export default class Parser {
         FormulaError.invalidArgumentsCount(node.start, node.name);
       }
 
-      if (isSafeFunction(neededFunc) && safe) {
-        const safeFn = neededFunc[`${format}SafeFn`];
-        return safeFn(functionArgs, bpiumValues);
-      } else {
+      const skipDefaults = !!neededFunc.skipVariableDefaults;
+      if (skipDefaults) {
+        this.skipVariableDefaultsDepth++;
+      }
+      try {
+        const functionArgs: string[] = node.args.map((arg) =>
+          this.stringifyAst({ node: arg, format, safe, values, bpiumValues }),
+        );
+
+        if (isSafeFunction(neededFunc) && safe) {
+          const safeFn = neededFunc[`${format}SafeFn`];
+          return safeFn(functionArgs, bpiumValues);
+        }
         const fn = neededFunc[`${format}Fn`];
         return fn(functionArgs, bpiumValues);
+      } finally {
+        if (skipDefaults) {
+          this.skipVariableDefaultsDepth--;
+        }
       }
     }
     FormulaError.invalidFunction(node.func.pos, node.name);
