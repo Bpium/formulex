@@ -22,14 +22,14 @@ export const dateFunctionsToJsMap: Record<
    */
   DATE: ([year, month, day, hour, minute, second]) => {
     return `(function () {
-        let dt = DateTime.fromObject({ year: ${year}, month: 1, day: 1});
+        let dt = DateTime.fromObject({ year: ${year}, month: 1, day: 1}, { zone: 'utc' });
         dt = dt.plus({ months: ${month} - 1, days: ${day} - 1, hours: ${hour ?? 0}, minutes: ${minute ?? 0}, seconds: ${second ?? 0} });
         return dt;
         })().toFormat(${DATE_FORMAT}).slice(0, -2)`;
   },
   SAFEDATE: ([year, month, day, hour, minute, second]) => {
     return `(function () {
-        let dt = DateTime.fromObject({ year: ${year}, month: 1, day: 1});
+        let dt = DateTime.fromObject({ year: ${year}, month: 1, day: 1}, { zone: 'utc' });
         dt = dt.plus({ months: ${month} - 1, days: ${day} - 1, hours: ${hour ?? 0}, minutes: ${minute ?? 0}, seconds: ${second ?? 0} });
         return dt;
         })().toFormat(${DATE_FORMAT}).slice(0, -2)`;

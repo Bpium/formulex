@@ -21,7 +21,7 @@ describe('sql date funcs', () => {
   test('DATE', () => {
     const parser = new Parser('DATE(2012, 12, 12)');
     expect(parser.toSqlWithVariables()).toBe(
-      'MAKE_TIMESTAMP(2012, 12, 12, 0, 0, 0)::TIMESTAMPTZ',
+      "MAKE_TIMESTAMP(2012, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC'",
     );
   });
   test('safe DATE', () => {
@@ -32,7 +32,7 @@ describe('sql date funcs', () => {
         + ((1) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ`,
+        + (0) * interval '1 second') AT TIME ZONE 'UTC'`,
     );
   });
   /**
@@ -207,7 +207,7 @@ describe('sql date funcs', () => {
   test('STARTOF month', () => {
     const parser = new Parser('STARTOF(DATE(2025,12,12), "m")', fields);
     expect(parser.toSqlWithVariables(false, values)).toBe(`(CASE ('m')
-        WHEN 'ss' THEN DATE_TRUNC('second', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'mm' THEN DATE_TRUNC('minute', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'hh' THEN DATE_TRUNC('hour', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'd' THEN DATE_TRUNC('day', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'w' THEN DATE_TRUNC('week', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'm' THEN DATE_TRUNC('month', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) WHEN 'y' THEN DATE_TRUNC('year', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ)
+        WHEN 'ss' THEN DATE_TRUNC('second', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'mm' THEN DATE_TRUNC('minute', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'hh' THEN DATE_TRUNC('hour', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'd' THEN DATE_TRUNC('day', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'w' THEN DATE_TRUNC('week', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'm' THEN DATE_TRUNC('month', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') WHEN 'y' THEN DATE_TRUNC('year', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC')
         ELSE NULL
       END)`);
   });
@@ -215,7 +215,7 @@ describe('sql date funcs', () => {
   test('ENDOF month', () => {
     const parser = new Parser('ENDOF(DATE(2025,12,12), "m")', fields);
     expect(parser.toSqlWithVariables(false, values)).toBe(`(CASE ('m')
-        WHEN 'ss' THEN (DATE_TRUNC('second', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 second' - INTERVAL '1 second') WHEN 'mm' THEN (DATE_TRUNC('minute', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 minute' - INTERVAL '1 second') WHEN 'hh' THEN (DATE_TRUNC('hour', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 hour' - INTERVAL '1 second') WHEN 'd' THEN (DATE_TRUNC('day', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 day' - INTERVAL '1 second') WHEN 'w' THEN (DATE_TRUNC('week', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 week' - INTERVAL '1 second') WHEN 'm' THEN (DATE_TRUNC('month', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 month' - INTERVAL '1 second') WHEN 'y' THEN (DATE_TRUNC('year', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0)::TIMESTAMPTZ) + INTERVAL '1 year' - INTERVAL '1 second')
+        WHEN 'ss' THEN (DATE_TRUNC('second', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 second' - INTERVAL '1 second') WHEN 'mm' THEN (DATE_TRUNC('minute', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 minute' - INTERVAL '1 second') WHEN 'hh' THEN (DATE_TRUNC('hour', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 hour' - INTERVAL '1 second') WHEN 'd' THEN (DATE_TRUNC('day', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 day' - INTERVAL '1 second') WHEN 'w' THEN (DATE_TRUNC('week', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 week' - INTERVAL '1 second') WHEN 'm' THEN (DATE_TRUNC('month', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 month' - INTERVAL '1 second') WHEN 'y' THEN (DATE_TRUNC('year', MAKE_TIMESTAMP(2025, 12, 12, 0, 0, 0) AT TIME ZONE 'UTC') + INTERVAL '1 year' - INTERVAL '1 second')
         ELSE NULL
       END)`);
   });
@@ -227,7 +227,7 @@ describe('sql date funcs', () => {
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ)`);
+        + (0) * interval '1 second') AT TIME ZONE 'UTC')`);
   });
 
   test('setday', () => {
