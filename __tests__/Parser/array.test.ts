@@ -7,7 +7,7 @@ describe('arrays', () => {
   });
   test('num dates', () => {
     const parser = new Parser('[DATE(2012,12,12)]');
-    expect(parser.runJs(parser.toJs(true))).toEqual(['2012-12-12 00:00:00+04']);
+    expect(parser.runJs(parser.toJs(true))).toEqual(['2012-12-12 00:00:00+00']);
   });
   test('num bools', () => {
     const parser = new Parser('[true, false]');

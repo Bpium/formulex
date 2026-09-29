@@ -363,12 +363,12 @@ describe('arrays funcs sql querys', () => {
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1)`);
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1)`);
   });
   test('sql SORT with date arr posi mode', () => {
     const parser = new Parser(
@@ -381,22 +381,22 @@ describe('arrays funcs sql querys', () => {
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1) END)`);
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1) END)`);
   });
   test('sql SORT with date arr negative mode', () => {
     const parser = new Parser(
@@ -409,22 +409,22 @@ describe('arrays funcs sql querys', () => {
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1) END)`);
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1) END)`);
   });
   test('sql SORT with date arr unexpected mode', () => {
     const parser = new Parser(
@@ -437,22 +437,22 @@ describe('arrays funcs sql querys', () => {
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1 DESC) ELSE ARRAY(SELECT UNNEST(ARRAY[(MAKE_DATE(1000, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ,(MAKE_DATE(200, 1, 1)
+        + (0) * interval '1 second') AT TIME ZONE 'UTC',(MAKE_DATE(200, 1, 1)
         + ((12) - 1) * interval '1 month'
         + ((12) - 1) * interval '1 day'
         + (0) * interval '1 hour'
         + (0) * interval '1 minute'
-        + (0) * interval '1 second')::TIMESTAMPTZ]) ORDER BY 1) END)`);
+        + (0) * interval '1 second') AT TIME ZONE 'UTC']) ORDER BY 1) END)`);
   });
   test('sql SORT with items arr', () => {
     const parser = new Parser('SORT({status})', variables);

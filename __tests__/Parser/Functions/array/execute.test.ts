@@ -287,8 +287,8 @@ describe('arrays funcs executing', () => {
       variables,
     );
     expect(parser.runJs(parser.toJs(true), values)).toEqual([
-      '0200-12-12 00:00:00+02',
-      '1000-12-12 00:00:00+02',
+      '0200-12-12 00:00:00+00',
+      '1000-12-12 00:00:00+00',
     ]);
   });
   test('SORT with date arr posi mode', () => {
@@ -297,8 +297,8 @@ describe('arrays funcs executing', () => {
       variables,
     );
     expect(parser.runJs(parser.toJs(true), values)).toEqual([
-      '0200-12-12 00:00:00+02',
-      '1000-12-12 00:00:00+02',
+      '0200-12-12 00:00:00+00',
+      '1000-12-12 00:00:00+00',
     ]);
   });
   test('SORT with date arr negative mode', () => {
@@ -307,8 +307,8 @@ describe('arrays funcs executing', () => {
       variables,
     );
     expect(parser.runJs(parser.toJs(true), values)).toEqual([
-      '1000-12-12 00:00:00+02',
-      '0200-12-12 00:00:00+02',
+      '1000-12-12 00:00:00+00',
+      '0200-12-12 00:00:00+00',
     ]);
   });
   test('SORT with date arr unexpected mode', () => {
@@ -317,8 +317,8 @@ describe('arrays funcs executing', () => {
       variables,
     );
     expect(parser.runJs(parser.toJs(true), values)).toEqual([
-      '0200-12-12 00:00:00+02',
-      '1000-12-12 00:00:00+02',
+      '0200-12-12 00:00:00+00',
+      '1000-12-12 00:00:00+00',
     ]);
   });
   test('SORT with items arr', () => {

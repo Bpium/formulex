@@ -20,56 +20,56 @@ describe('execute date funcs', () => {
     const parser = new Parser('DATE(2012, 12, 12)');
     const js = parser.toJs();
 
-    expect(parser.runJs(js)).toBe('2012-12-12 00:00:00+04');
+    expect(parser.runJs(js)).toBe('2012-12-12 00:00:00+00');
   });
   test('DATE with invalid month', () => {
     const parser = new Parser('DATE(2012, 42, 12)');
     const js = parser.toJs();
 
-    expect(parser.runJs(js)).toBe('2015-06-12 00:00:00+03');
+    expect(parser.runJs(js)).toBe('2015-06-12 00:00:00+00');
   });
   test('DATE with time', () => {
     const parser = new Parser('DATE(2012, 12, 12, 1, 1, 1)');
     const js = parser.toJs();
 
-    expect(parser.runJs(js)).toBe('2012-12-12 01:01:01+04');
+    expect(parser.runJs(js)).toBe('2012-12-12 01:01:01+00');
   });
   test('DATE with time without seconds', () => {
     const parser = new Parser('DATE(2012, 12, 12, 1, 1)');
     const js = parser.toJs();
 
-    expect(parser.runJs(js)).toBe('2012-12-12 01:01:00+04');
+    expect(parser.runJs(js)).toBe('2012-12-12 01:01:00+00');
   });
   test('DATE can work with minus', () => {
     const parser = new Parser('DATE(2012, 1, -1)');
     const js = parser.toJs();
 
-    expect(parser.runJs(js)).toBe('2011-12-30 00:00:00+04');
+    expect(parser.runJs(js)).toBe('2011-12-30 00:00:00+00');
   });
 
   test('safe DATE with invalid month', () => {
     const parser = new Parser('DATE(2012, 23, 1)');
     const js = parser.toJs(true);
 
-    expect(parser.runJs(js)).toBe('2013-11-01 00:00:00+04');
+    expect(parser.runJs(js)).toBe('2013-11-01 00:00:00+00');
   });
   test('safe DATE with time', () => {
     const parser = new Parser('DATE(2012, 12, 12, 1, 1, 1)');
     const js = parser.toJs(true);
 
-    expect(parser.runJs(js)).toBe('2012-12-12 01:01:01+04');
+    expect(parser.runJs(js)).toBe('2012-12-12 01:01:01+00');
   });
   test('safe DATE with time without seconds', () => {
     const parser = new Parser('DATE(2012, 12, 12, 1, 1)');
     const js = parser.toJs(true);
 
-    expect(parser.runJs(js)).toBe('2012-12-12 01:01:00+04');
+    expect(parser.runJs(js)).toBe('2012-12-12 01:01:00+00');
   });
   test('safe DATE can work with minus', () => {
     const parser = new Parser('DATE(2012, 1, -1)');
     const js = parser.toJs(true);
 
-    expect(parser.runJs(js)).toBe('2011-12-30 00:00:00+04');
+    expect(parser.runJs(js)).toBe('2011-12-30 00:00:00+00');
   });
 
   test('DATEADD', () => {
@@ -184,7 +184,7 @@ describe('execute date funcs', () => {
   test('TIMESTAMP', () => {
     const parser = new Parser('TIMESTAMP(DATE(2012,12,12))', fields);
     const js = parser.toJs();
-    expect(parser.runJs(js, values)).toBe(1355256000);
+    expect(parser.runJs(js, values)).toBe(1355270400);
   });
 
   // test('dateformat', () => {
@@ -286,10 +286,14 @@ describe('execute date funcs', () => {
   //   );
   // });
   test('DATE IN DATEADD', () => {
-    const parser = new Parser('DATEADD(DATE(2001,12,12), 12, "d")', fields);
+    // DATE is UTC; DATEADD reformats in process TZ — compare absolute instant
+    const parser = new Parser(
+      'TIMESTAMP(DATEADD(DATE(2001,12,12), 12, "d"))',
+      fields,
+    );
     const js = parser.toJs();
 
-    expect(parser.runJs(js, values)).toBe('2001-12-24 00:00:00+03');
+    expect(parser.runJs(js, values)).toBe(1009152000); // 2001-12-24 00:00:00Z
   });
 
   test('DATEFORMAT', () => {

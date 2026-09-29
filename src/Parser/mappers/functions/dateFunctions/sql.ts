@@ -7,12 +7,11 @@ export const dateFunctionsToSqlMap: Record<
   IFormatterFunc
 > = {
   /**
-   * Returns the raw date expression.
-   * @param {[string]} date - Date SQL expression.
-   * @returns {string} SQL string.
+   * Wall-clock DATE as UTC instant (independent of PG session TimeZone).
+   * `timestamp AT TIME ZONE 'UTC'` → timestamptz.
    */
   DATE: ([year, month, day, hour, minute, second]) => {
-    return `MAKE_TIMESTAMP(${year}, ${month}, ${day}, ${hour ?? 0}, ${minute ?? 0}, ${second ?? 0})::TIMESTAMPTZ`;
+    return `MAKE_TIMESTAMP(${year}, ${month}, ${day}, ${hour ?? 0}, ${minute ?? 0}, ${second ?? 0}) AT TIME ZONE 'UTC'`;
   },
   SAFEDATE: ([year, month, day, hour, minute, second]) => {
     return `(MAKE_DATE(${year}, 1, 1)
@@ -20,7 +19,7 @@ export const dateFunctionsToSqlMap: Record<
         + ((${day}) - 1) * interval '1 day'
         + (${hour ?? 0}) * interval '1 hour'
         + (${minute ?? 0}) * interval '1 minute'
-        + (${second ?? 0}) * interval '1 second')::TIMESTAMPTZ`;
+        + (${second ?? 0}) * interval '1 second') AT TIME ZONE 'UTC'`;
   },
 
   /**
